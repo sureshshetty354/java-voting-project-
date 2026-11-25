@@ -1,1 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Voting Application</title>
 
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2ff;
+            text-align: center;
+            padding: 40px 15px;
+        }
+
+        .container {
+            background: white;
+            max-width: 500px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px #ccc;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            margin: 15px 0;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        #message {
+            margin: 15px;
+            font-weight: bold;
+        }
+
+        .results {
+            text-align: left;
+            margin-top: 25px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <h1>Online Voting System</h1>
+    <p>Choose your favourite programming language</p>
+
+    <button onclick="vote('Java')">Vote for Java</button>
+    <button onclick="vote('Python')">Vote for Python</button>
+    <button onclick="vote('JavaScript')">Vote for JavaScript</button>
+
+    <div id="message"></div>
+
+    <div class="results">
+        <h2>Voting Results</h2>
+        <div id="results">Loading...</div>
+    </div>
+
+</div>
+
+<script>
+async function vote(option) {
+    const response = await fetch(
+        '/api/vote?option=' + encodeURIComponent(option),
+        { method: 'POST' }
+    );
+
+    const data = await response.json();
+
+    document.getElementById('message').innerText =
+        data.message || 'Unable to vote';
+
+    loadResults();
+}
+
+async function loadResults() {
+    const response = await fetch('/api/results');
+    const data = await response.json();
+
+    document.getElementById('results').innerHTML =
+        Object.entries(data)
+        .map(([name, count]) => `<p>${name}: ${count} votes</p>`)
+        .join('');
+}
+
+loadResults();
+</script>
+
+</body>
+</html>
