@@ -1,1 +1,9 @@
+aws_region = "us-east-1"
 
+instance_type = "t3.micro"
+
+github_repo_url = "https://github.com/sureshshetty354/java-voting-project-.git"
+
+key_name = "voting-key"
+
+ssh_cidr = "106.217.108.167/32"
